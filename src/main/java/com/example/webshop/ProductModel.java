@@ -1,23 +1,24 @@
-package com.example.webshop; // Adjust the package name accordingly
+package com.example.webshop; 
 
 public class ProductModel {
-    // Attributes
-    private Long id;         // Unique identifier for the product
-    private String name;     // Name of the product
-    private Double price;    // Price of the product
-    private String size;     // Size of the product
-    private String color;    // Color of the product
+    private Long id;
+    private String name;
+    private Double price;
+    private String size;
+    private String color;
+    private String category; // New attribute
 
     // Constructor
-    public ProductModel(Long id, String name, Double price, String size, String color) {
+    public ProductModel(Long id, String name, Double price, String size, String color, String category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.size = size;
         this.color = color;
+        this.category = category; // Initialize new attribute
     }
 
-    // Public getter methods for each attribute
+    // Getters
     public Long getId() {
         return id;
     }
@@ -36,5 +37,9 @@ public class ProductModel {
 
     public String getColor() {
         return color;
+    }
+
+    public String getCategory() {
+        return category; // New getter
     }
 }
