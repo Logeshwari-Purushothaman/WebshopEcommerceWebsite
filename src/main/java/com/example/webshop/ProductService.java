@@ -21,6 +21,10 @@ public class ProductService {
             new ProductModel(6L, "T-Shirt", 21.99, "L", "Black", "Clothing")
         );
     }
+    
+    public List<ProductModel> getAllProducts() {
+        return products;
+    }
 
     // Method to filter products by color
     public List<ProductModel> getProductsByColor(String color) {

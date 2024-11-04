@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/products") // Base mapping for all product-related endpoints
 public class ProductController {
 
     private final ProductService productService; // Use final for better design
@@ -14,6 +14,13 @@ public class ProductController {
     // Constructor-based Dependency Injection
     public ProductController(ProductService productService) {
         this.productService = productService;
+    }
+    
+    // Endpoint for to get all products
+    @GetMapping
+    public ResponseEntity<List<ProductModel>> getAllProducts() {
+        List<ProductModel> allProducts = productService.getAllProducts();
+        return ResponseEntity.ok(allProducts);
     }
 
     // Endpoint for filtered view by color
