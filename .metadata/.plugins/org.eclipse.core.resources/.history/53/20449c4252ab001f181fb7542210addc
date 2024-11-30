@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Product</title>
+</head>
+<body>
+    <h1>Delete a Product</h1>
+    
+    <label for="productId">Product ID:</label>
+    <input type="number" id="productId" name="productId" required><br><br>
+
+    <button id="delete" type="button">Delete Product</button>
+
+    <p id="responseMessage"></p>
+
+    <script>
+        // Event listener for the delete button
+        document.getElementById('delete').addEventListener('click', async function() {
+            const productId = document.getElementById('productId').value;
+            const response = await fetch(`/products/${productId}`, {
+                method: 'DELETE',
+            });
+
+            // Handle the response based on HTTP status code
+            if (response.ok) {
+                const remainingProducts = await response.json();
+                document.getElementById('responseMessage').textContent = 'Product deleted successfully!';
+                console.log('Remaining Products:', remainingProducts);
+            } else if (response.status === 404) {
+                document.getElementById('responseMessage').textContent = 'Product not found!';
+            } else {
+                document.getElementById('responseMessage').textContent = 'Failed to delete product.';
+            }
+        });
+    </script>
+</body>
+</html>

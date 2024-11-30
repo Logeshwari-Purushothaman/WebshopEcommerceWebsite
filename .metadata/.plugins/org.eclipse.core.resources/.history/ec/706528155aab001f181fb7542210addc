@@ -1,0 +1,100 @@
+package com.example.webshop;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/products") // Base mapping for all product-related endpoints
+public class ProductController {
+
+    private final ProductService productService; // Use final for better design
+
+    // Constructor-based Dependency Injection
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+    // Catalog Page - List all products
+    @GetMapping("/catalog")
+    public String getCatalog(Model model) {
+        List<ProductModel> products = productService.getAllProducts();
+        model.addAttribute("products", products);  // Adding the list of products to the model
+        return "catalog";  // Thymeleaf will look for a template named "catalog.html"
+    }
+    
+    @GetMapping("/product/{id}")
+    public String getProductDetail(@PathVariable("id") long productId, Model model) {
+        Optional<ProductModel> product = productService.getProductById(productId);
+        if (product.isPresent()) {
+            model.addAttribute("product", product.get());
+            return "productDetail";  // Thymeleaf will look for "productDetail.html"
+        } else {
+            return "error";  // You can create an error page if the product is not found
+        }
+    }
+
+    // Endpoint for filtered view by color
+    @GetMapping("/filter/color/{color}")
+    public ResponseEntity<List<ProductModel>> getProductsByColor(@PathVariable String color) {
+        List<ProductModel> filteredProducts = productService.getProductsByColor(color);
+        return ResponseEntity.ok(filteredProducts);
+    }
+
+    // Endpoint for filtered view by category
+    @GetMapping("/filter/category/{category}")
+    public ResponseEntity<List<ProductModel>> getProductsByCategory(@PathVariable String category) {
+        List<ProductModel> filteredProducts = productService.getProductsByCategory(category);
+        return ResponseEntity.ok(filteredProducts);
+    }
+
+    // Endpoint for filtered view by name
+    @GetMapping("/filter/name/{name}")
+    public ResponseEntity<List<ProductModel>> getProductsByName(@PathVariable String name) {
+        List<ProductModel> filteredProducts = productService.getProductsByName(name);
+        return ResponseEntity.ok(filteredProducts);
+    }
+    
+    // Endpoint for to get all products
+    @GetMapping
+    public ResponseEntity<List<ProductModel>> getAllProducts() {
+        List<ProductModel> allProducts = productService.getAllProducts();
+        return ResponseEntity.ok(allProducts);
+    }
+    
+ // Adding product with RequestBody to map the object directly
+    @PostMapping
+    public ResponseEntity<ProductModel> addProduct(@RequestBody ProductModel newProduct) {
+        Optional<ProductModel> addedProduct = productService.addProduct(newProduct);
+
+        return addedProduct
+                .map(product -> ResponseEntity.status(201).body(product)) // 201 Created
+                .orElse(ResponseEntity.status(400).build()); // 400 Bad Request for duplicate
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<List<ProductModel>> deleteProduct(@PathVariable Long id) {
+        List<ProductModel> remainingProducts = productService.deleteProduct(id);
+        
+        // If the product was deleted, we return the list of remaining products
+        if (remainingProducts != null) {
+            return ResponseEntity.ok(remainingProducts);  // HTTP 200 OK
+        } else {
+            return ResponseEntity.status(404).build();  // HTTP 404 Not Found if product doesn't exist
+        }
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductModel> updateProduct(@PathVariable Long id, @RequestBody ProductModel updatedProduct) {
+        ProductModel product = productService.updateProduct(id, updatedProduct);
+
+        if (product != null) {
+            return ResponseEntity.ok(product);  // HTTP 200 OK with the updated product
+        } else {
+            return ResponseEntity.status(404).build();  // HTTP 404 Not Found if product doesn't exist
+        }
+    }
+
+
+}     

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail</title>
+</head>
+<body>
+    <h1>Product Detail</h1>
+
+    <div>
+        <h2 th:text="${product.name}">Product Name</h2>
+        <p><strong>Price:</strong> $<span th:text="${product.price}">Price</span></p>
+        <p><strong>Size:</strong> <span th:text="${product.size}">Size</span></p>
+        <p><strong>Color:</strong> <span th:text="${product.color}">Color</span></p>
+        <p><strong>Category:</strong> <span th:text="${product.category}">Category</span></p>
+    </div>
+
+    <!-- Button to go back to the catalog page -->
+    <button onclick="window.location.href='/catalog'">Back to Catalog</button>
+
+    <footer>
+        <p>&copy; 2024 Our Webshop</p>
+    </footer>
+</body>
+</html>

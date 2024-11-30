@@ -1,0 +1,98 @@
+package com.example.webshop;
+
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Optional;
+
+@Service
+public class ProductService {
+    private final List<ProductModel> products = new ArrayList<>();
+
+    // Constructor to initialize the product list
+    public ProductService() {
+        		 // Predefined product list
+                products.add(new ProductModel(1L, "T-Shirt", 19.99, "M", "Red", "Clothing"));
+                products.add(new ProductModel(2L, "Jeans", 39.99, "L", "Blue", "Clothing"));
+                products.add(new ProductModel(5L, "Kurta", 99.99, "S", "Yellow", "Clothing"));
+                // Additional products can be added here
+ 
+    }
+    
+    public List<ProductModel> getAllProducts() {
+        return products;
+    }
+
+    // Method to filter products by color
+    public List<ProductModel> getProductsByColor(String color) {
+        return products.stream()
+                .filter(product -> product.getColor().equalsIgnoreCase(color))
+                .collect(Collectors.toList());
+    }
+
+    // Method to filter products by category
+    public List<ProductModel> getProductsByCategory(String category) {
+        return products.stream()
+                .filter(product -> product.getCategory().equalsIgnoreCase(category))
+                .collect(Collectors.toList());
+    }
+
+    // Method to filter products by name
+    public List<ProductModel> getProductsByName(String name) {
+        return products.stream()
+                .filter(product -> product.getName().equalsIgnoreCase(name))
+                .collect(Collectors.toList());
+    }
+    
+    public Optional<ProductModel> addProduct(ProductModel newProduct) {
+        boolean isDuplicate = products.stream()
+                .anyMatch(product -> product.getName().equalsIgnoreCase(newProduct.getName())
+                        && product.getColor().equalsIgnoreCase(newProduct.getColor())
+                        && product.getCategory().equalsIgnoreCase(newProduct.getCategory()));
+
+        if (isDuplicate) {
+            return Optional.empty(); // Duplicate found, return empty
+        } else {
+            products.add(newProduct); // Add the new product
+            return Optional.of(newProduct);
+        }
+    }
+    
+    public List<ProductModel> deleteProduct(Long id) {
+        Optional<ProductModel> productToDelete = products.stream()
+                .filter(product -> product.getId().equals(id))
+                .findFirst();
+        
+        if (productToDelete.isPresent()) {
+            products.remove(productToDelete.get());  // Remove the product
+            return products;  // Return the updated list of products
+        } else {
+            return null;  // Return null if the product wasn't found
+        }
+    }
+    
+    public ProductModel updateProduct(Long id, ProductModel updatedProduct) {
+        Optional<ProductModel> existingProductOpt = products.stream()
+                .filter(product -> product.getId().equals(id))
+                .findFirst();
+        
+        if (existingProductOpt.isPresent()) {
+            ProductModel existingProduct = existingProductOpt.get();
+            
+            // Update the fields of the existing product
+            existingProduct.setName(updatedProduct.getName());
+            existingProduct.setPrice(updatedProduct.getPrice());
+            existingProduct.setSize(updatedProduct.getSize());
+            existingProduct.setColor(updatedProduct.getColor());
+            existingProduct.setCategory(updatedProduct.getCategory());
+            
+            return existingProduct;  // Return the updated product
+        } else {
+            return null;  // Return null if the product was not found
+        }
+    }
+
+
+}
