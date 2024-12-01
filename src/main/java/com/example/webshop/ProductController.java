@@ -16,6 +16,24 @@ public class ProductController {
         this.productService = productService;
     }
     
+    @GetMapping("/test")
+    public ResponseEntity<String> testEndpoint() {
+        return ResponseEntity.ok("Controller is working!");
+    }
+
+    
+    @PostMapping("/add")
+    public ResponseEntity<String> addProduct(
+    		@RequestBody ProductModel product) {
+        // Generate unique ID or handle ID elsewhere
+        boolean isAdded = productService.addProduct(product);
+        if (isAdded) {
+            return ResponseEntity.ok("Product added successfully!");
+        } else {
+            return ResponseEntity.status(400).body("Product already exists!");
+        }
+    }
+    
     // Endpoint for to get all products
     @GetMapping
     public ResponseEntity<List<ProductModel>> getAllProducts() {

@@ -25,6 +25,16 @@ public class ProductService {
     public List<ProductModel> getAllProducts() {
         return products;
     }
+    
+    //method to add a new product
+    public boolean addProduct(ProductModel product) {
+        // Check for duplicates
+        if (products.stream().anyMatch(p -> p.getName().equalsIgnoreCase(product.getName()))) {
+            return false; // Product already exists
+        }
+        products.add(product);
+        return true;
+    }
 
     // Method to filter products by color
     public List<ProductModel> getProductsByColor(String color) {

@@ -9,13 +9,27 @@ public class ProductModel {
     private String category; // New attribute
 
     // Constructor
-    public ProductModel(Long id, String name, Double price, String size, String color, String category) {
+    public ProductModel(long id, String name, double price,String color, String category,String size) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.size = size;
         this.color = color;
         this.category = category; // Initialize new attribute
+    }
+    
+    // Constructor without ID (for new products)
+    public ProductModel(String name, double price, String color, String category, String size) {
+        this.name = name;
+        this.price = price;
+        this.size = size;
+        this.color = color;
+        this.category = category;
+    }
+    
+ // Setters (if needed)
+    public void setId(Long id) {
+        this.id = id;
     }
 
     // Getters
