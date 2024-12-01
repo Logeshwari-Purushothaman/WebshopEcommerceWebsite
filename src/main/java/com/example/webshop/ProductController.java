@@ -23,16 +23,38 @@ public class ProductController {
 
     
     @PostMapping("/add")
-    public ResponseEntity<String> addProduct(
+    public ResponseEntity<?> addProduct(
     		@RequestBody ProductModel product) {
         // Generate unique ID or handle ID elsewhere
         boolean isAdded = productService.addProduct(product);
         if (isAdded) {
-            return ResponseEntity.ok("Product added successfully!");
+            return ResponseEntity.ok(product);
         } else {
             return ResponseEntity.status(400).body("Product already exists!");
         }
     }
+    
+    //To delete a product
+    @DeleteMapping("/{id}")
+    public ResponseEntity<List<ProductModel>> deleteProductById(@PathVariable Long id) {
+        List<ProductModel> remainingProducts = productService.deleteProductById(id);
+        if (remainingProducts != null) {
+            return ResponseEntity.ok(remainingProducts);
+        } else {
+            return ResponseEntity.status(404).body(null); // Product not found
+        }
+    }
+    
+    @PutMapping("/update")
+    public ResponseEntity<ProductModel> updateProduct(@RequestBody ProductModel updatedProduct) {
+        ProductModel product = productService.updateProduct(updatedProduct);
+        if (product != null) {
+            return ResponseEntity.ok(product); // Return updated product
+        } else {
+            return ResponseEntity.status(404).body(null); // Product not found
+        }
+    }
+
     
     // Endpoint for to get all products
     @GetMapping

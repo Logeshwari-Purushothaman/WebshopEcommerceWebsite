@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Product</title>
+</head>
+<body>
+    <h1>Delete Product</h1>
+    <label for="productId">Enter Product ID:</label>
+    <input type="number" id="productId" required>
+    <button id="delete">Delete Product</button>
+    <p id="response"></p>
+
+    <script>
+        document.getElementById('delete').addEventListener('click', async () => {
+            const productId = document.getElementById('productId').value;
+            if (!productId) {
+                document.getElementById('response').textContent = "Please enter a valid product ID.";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/products/${productId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    const remainingProducts = await response.json();
+                    document.getElementById('response').textContent = "Product deleted successfully!";
+                    console.log("Remaining products:", remainingProducts);
+                } else if (response.status === 404) {
+                    document.getElementById('response').textContent = "Error: Product not found.";
+                } else {
+                    document.getElementById('response').textContent = "Error: Unable to delete the product.";
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('response').textContent = "An error occurred while deleting the product.";
+            }
+        });
+    </script>
+</body>
+</html>

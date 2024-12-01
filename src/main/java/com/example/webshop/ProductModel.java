@@ -1,4 +1,4 @@
-package com.example.webshop; 
+package com.example.webshop;
 
 public class ProductModel {
     private Long id;
@@ -8,52 +8,66 @@ public class ProductModel {
     private String color;
     private String category; // New attribute
 
-    // Constructor
-    public ProductModel(long id, String name, double price,String color, String category,String size) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.size = size;
-        this.color = color;
-        this.category = category; // Initialize new attribute
+    // Default constructor (needed for deserialization)
+    public ProductModel() {
     }
-    
-    // Constructor without ID (for new products)
-    public ProductModel(String name, double price, String color, String category, String size) {
+
+    // Constructor with parameters
+    public ProductModel(long id, String name, double price, String color, String category, String size) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.size = size;
         this.color = color;
         this.category = category;
     }
-    
- // Setters (if needed)
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    // Getters
+    // Getters and setters
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Double getPrice() {
         return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public String getSize() {
         return size;
     }
 
+    public void setSize(String size) {
+        this.size = size;
+    }
+
     public String getColor() {
         return color;
     }
 
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     public String getCategory() {
-        return category; // New getter
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }
