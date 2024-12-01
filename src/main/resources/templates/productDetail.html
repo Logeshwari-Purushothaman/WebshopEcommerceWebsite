@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail</title>
+</head>
+<body>
+    <h1>Product Detail</h1>
+
+    <div>
+        <h2 th:text="${product.name}"></h2>
+        <p>Price: $<span th:text="${product.price}"></span></p>
+        <p>Size: <span th:text="${product.size}"></span></p>
+        <p>Color: <span th:text="${product.color}"></span></p>
+        <p>Category: <span th:text="${product.category}"></span></p>
+    </div>
+
+    <!-- Add to Cart Button -->
+    <form th:action="@{/cart-add/{id}(id=${product.id})}" method="get">
+        <button type="submit">Add to Cart</button>
+    </form>
+
+    <br>
+
+    <button onclick="window.location.href='@{/products/catalog}'">Back to Catalog</button>
+</body>
+</html>
