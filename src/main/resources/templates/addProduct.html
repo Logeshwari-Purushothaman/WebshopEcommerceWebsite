@@ -25,11 +25,6 @@
         <input type="text" id="size" name="size" th:field="*{size}" required><br><br>
 
         <button type="submit">Add Product</button>
-		
-		<!-- Add this inside the product detail template -->
-		<form th:action="@{/cart/add/{id}(id=${product.id})}" method="get">
-		    <button type="submit" class="btn">Add to Cart</button>
-		</form>
     </form>
 </body>
 </html>

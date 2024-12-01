@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.webshop.Shopping.ShoppingCartService;
+
 import java.util.List;
 
 @Controller
@@ -12,10 +14,12 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService; // Use final for better design
+    private final ShoppingCartService shoppingCartService; // Add ShoppingCartService
 
     // Constructor-based Dependency Injection
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, ShoppingCartService shoppingCartService) {
         this.productService = productService;
+        this.shoppingCartService = shoppingCartService;
     }
 
     // Test endpoint for verifying controller functionality
@@ -23,13 +27,13 @@ public class ProductController {
     public ResponseEntity<String> testEndpoint() {
         return ResponseEntity.ok("Controller is working!");
     }
-    
+
     // Dashboard (index page)
     @GetMapping("/dashboard")
     public String getDashboard() {
         return "index"; // Render the dashboard view
     }
-    
+
     // Endpoint for the Catalog Page (List of Products)
     @GetMapping("/catalog")
     public String getCatalogPage(@RequestParam(value = "edit", required = false, defaultValue = "false") boolean edit, Model model) {
@@ -37,21 +41,21 @@ public class ProductController {
         model.addAttribute("editMode", edit); // Pass edit mode to Thymeleaf template
         return "catalog"; // Render the catalog.html template
     }
-    
+
     // Endpoint to delete a product by ID (Non-RESTful endpoint)
     @GetMapping("/product-delete/{id}")
     public String deleteProductById(@PathVariable Long id) {
         productService.deleteProductById(id); // Call service to delete the product
         return "redirect:/products/catalog?edit=true"; // Redirect to catalog page in edit mode
     }
-    
+
     // Add Product Page
     @GetMapping("/add")
     public String getAddProductPage(Model model) {
         model.addAttribute("product", new ProductModel());  // Empty product for the form
         return "addProduct";  // Render addProduct.html template
     }
-    
+
     // Add Product (Handle form submission)
     @PostMapping("/add")
     public String addProduct(@ModelAttribute ProductModel product) {
@@ -60,7 +64,6 @@ public class ProductController {
     }
 
     // Thymeleaf endpoint for displaying the details of a single product (Product Detail Page)
-    // Endpoint for the Product Detail Page
     @GetMapping("/detail/{id}")
     public String getProductDetailPage(@PathVariable Long id, Model model) {
         ProductModel product = productService.getProductById(id);
@@ -124,4 +127,3 @@ public class ProductController {
         return ResponseEntity.ok(filteredProducts);
     }
 }
-

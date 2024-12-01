@@ -2,6 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Product Catalog</title>
+    <style>
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .action-links a {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
 
@@ -30,9 +49,12 @@
             <td th:text="${product.size}"></td>
             <td th:text="${product.color}"></td>
             <td th:text="${product.category}"></td>
-            <td>
+            <td class="action-links">
                 <!-- Conditionally render the delete button if editMode is true -->
                 <a th:if="${editMode}" th:href="@{/products/product-delete/{id}(id=${product.id})}">Delete</a>
+                
+                <!-- Add to Cart button -->
+				<a class="btn" th:href="@{/shopping/cart-add/{id}(id=${product.id})}">Add to Cart</a>
             </td>
         </tr>
     </tbody>

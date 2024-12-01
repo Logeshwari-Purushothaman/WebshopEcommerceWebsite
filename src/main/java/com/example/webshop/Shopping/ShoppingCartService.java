@@ -7,34 +7,35 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ShoppingCartService {
+public class ShoppingCartService
+{
 
-    private final ProductService productService; // To fetch products by ID
-    private final ShoppingCart shoppingCart; // The cart instance
+    private final ProductService productService;
+    private final ShoppingCart shoppingCart;
 
     public ShoppingCartService(ProductService productService) {
         this.productService = productService;
-        this.shoppingCart = new ShoppingCart(); // Initialize a new cart
+        this.shoppingCart = new ShoppingCart(); // Initialize the shopping cart
     }
 
-    // Add product to the cart by ID
     public void addProductToCart(Long productId) {
-        Optional<ProductModel> productOpt = Optional.ofNullable(productService.getProductById(productId));
-
-        if (productOpt.isPresent()) {
-            ProductModel product = productOpt.get();
-            // If the product is already in the cart, increase its quantity
-            shoppingCart.products.merge(product, 1, Integer::sum);
+        ProductModel product = productService.getProductById(productId);
+        if (product != null) {
+            shoppingCart.getProducts().merge(product, 1, Integer::sum);
+        } else {
+            throw new RuntimeException("Product not found: " + productId);
         }
     }
 
-    // Get the current shopping cart
     public ShoppingCart getShoppingCart() {
         return shoppingCart;
     }
 
-    // Calculate the total price of the shopping cart
     public double getTotalPrice() {
-        return shoppingCart.getTotalPrice();
+        return shoppingCart.getProducts()
+                           .entrySet()
+                           .stream()
+                           .mapToDouble(entry -> entry.getKey().getPrice() * entry.getValue())
+                           .sum();
     }
 }

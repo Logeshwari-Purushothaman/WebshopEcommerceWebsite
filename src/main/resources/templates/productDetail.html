@@ -4,11 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        .product-details {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .product-details p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .product-details span {
+            font-weight: bold;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .back-button {
+            background-color: #f1f1f1;
+            color: #333;
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background-color: #e9e9e9;
+        }
+    </style>
 </head>
 <body>
     <h1>Product Detail</h1>
 
-    <div>
+    <div class="product-details">
         <h2 th:text="${product.name}"></h2>
         <p>Price: $<span th:text="${product.price}"></span></p>
         <p>Size: <span th:text="${product.size}"></span></p>
@@ -17,12 +64,14 @@
     </div>
 
     <!-- Add to Cart Button -->
-    <form th:action="@{/cart-add/{id}(id=${product.id})}" method="get">
-        <button type="submit">Add to Cart</button>
-    </form>
+	<form th:action="@{/shopping/cart-add/{id}(id=${product.id})}" method="get">
+	        <button type="submit" class="button">Add to Cart</button>
+	    </form>
 
     <br>
 
-    <button onclick="window.location.href='@{/products/catalog}'">Back to Catalog</button>
+    <!-- Back to Catalog Button -->
+	<button onclick="window.location.href='/products/catalog'" class="back-button">Back to Catalog</button>
+
 </body>
 </html>

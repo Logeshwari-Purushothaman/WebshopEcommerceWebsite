@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        .tile {
+            width: 200px;
+            height: 150px;
+            display: inline-block;
+            margin: 10px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            vertical-align: top;
+            padding: 20px;
+            cursor: pointer;
+        }
+        .tile:hover {
+            background-color: #e0e0e0;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <div class="tile" th:onclick="|window.location.href='@{/products/catalog}'|">
+        <h2>Product Catalog</h2>
+        <p>View all products</p>
+    </div>
+
+    <div class="tile" th:onclick="|window.location.href='@{/products/add}'|">
+        <h2>Add Product</h2>
+        <p>Create a new product</p>
+    </div>
+</body>
+</html>

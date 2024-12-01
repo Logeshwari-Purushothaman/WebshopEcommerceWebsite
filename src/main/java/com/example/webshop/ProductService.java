@@ -9,8 +9,6 @@ import java.util.concurrent.atomic.AtomicLong;
 @Service
 public class ProductService {
 
-    private AtomicLong idCounter = new AtomicLong(7); // Start counter after the last existing product ID
-
     private List<ProductModel> products;
     
 
@@ -77,7 +75,7 @@ public class ProductService {
 
         // Assign a unique ID if not provided
         if (product.getId() == null) {
-            product.setId(idCounter.getAndIncrement());
+            product.setId((long) getAllProducts().size() + 1);
         }
 
         products.add(product);
