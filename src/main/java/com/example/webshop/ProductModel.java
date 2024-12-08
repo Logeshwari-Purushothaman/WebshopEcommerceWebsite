@@ -7,6 +7,8 @@ public class ProductModel {
     private String size;
     private String color;
     private String category; // New attribute
+    private Integer stock; // Temporary stock field
+
 
     // Default constructor (needed for deserialization)
     public ProductModel() {
@@ -20,6 +22,8 @@ public class ProductModel {
         this.size = size;
         this.color = color;
         this.category = category;
+        this.stock = stock; // Initialize the stock field
+
     }
 
     // Getters and setters
@@ -69,5 +73,13 @@ public class ProductModel {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+    
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 }

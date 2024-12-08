@@ -88,7 +88,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="entry : ${cart.products.entrySet()}">
+            <!-- Iterate through the cart products -->
+            <tr th:each="entry : ${cart.products}">
                 <td th:text="${entry.key.name}">Product Name</td>
                 <td th:text="${entry.value}">Quantity</td>
                 <td th:text="${entry.key.price}">Price</td>

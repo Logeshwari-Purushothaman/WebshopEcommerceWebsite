@@ -13,10 +13,12 @@ public class ShoppingCart {
         return products;
     }
 
+    /*
     // Method to calculate the total price of all products in the cart
     public double getTotalPrice() {
         return products.entrySet().stream()
                 .mapToDouble(entry -> entry.getKey().getPrice() * entry.getValue())
                 .sum();
     }
+    */
 }

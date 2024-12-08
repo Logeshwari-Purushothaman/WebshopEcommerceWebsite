@@ -3,9 +3,57 @@
 <head>
     <title>Product Catalog</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
         .btn {
             background-color: #4CAF50;
             color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .btn1 {
+            background-color: #f1f1f1;
+            color: #333;
             padding: 8px 16px;
             border-radius: 4px;
             text-decoration: none;
@@ -17,52 +65,86 @@
             background-color: #45a049;
         }
 
-        .action-links a {
-            margin-right: 10px;
+        .btn1:hover {
+            background-color: #e9e9e9;
+        }
+
+        .disabled-link {
+            pointer-events: none;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .action-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .sold-out-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
 
-<h1>Product Catalog</h1>
+    <h1>Product Catalog</h1>
 
-<!-- Show or hide the delete buttons based on the editMode variable -->
-<div th:if="${editMode}">
-    <h2>Edit Products</h2>
-</div>
+    <!-- Edit Mode Information -->
+    <div th:if="${editMode}">
+        <h2>Edit Products</h2>
+    </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Size</th>
-            <th>Color</th>
-            <th>Category</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:each="product : ${products}">
-            <td th:text="${product.name}"></td>
-            <td th:text="${product.price}"></td>
-            <td th:text="${product.size}"></td>
-            <td th:text="${product.color}"></td>
-            <td th:text="${product.category}"></td>
-            <td class="action-links">
-                <!-- Conditionally render the delete button if editMode is true -->
-                <a th:if="${editMode}" th:href="@{/products/product-delete/{id}(id=${product.id})}">Delete</a>
-                
-                <!-- Add to Cart button -->
-				<a class="btn" th:href="@{/shopping/cart-add/{id}(id=${product.id})}">Add to Cart</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Size</th>
+                <th>Color</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.price}"></td>
+                <td th:text="${product.size}"></td>
+                <td th:text="${product.color}"></td>
+                <td th:text="${product.category}"></td>
+                <td class="action-links">
+                    <!-- Delete Button (Visible in Edit Mode) -->
+                    <a th:if="${editMode}" 
+                       th:href="@{/products/product-delete/{id}(id=${product.id})}" 
+                       class="btn1">Delete</a>
 
-<!-- Link to toggle edit mode -->
-<a th:href="@{/products/catalog?edit=true}">Edit Mode</a> |
-<a th:href="@{/products/catalog?edit=false}">View Mode</a>
+                    <!-- Add to Cart Button -->
+                    <a class="btn" 
+                       th:href="@{/shopping/cart-add/{id}(id=${product.id})}" 
+                       th:disabled="${product.stock <= 0}" 
+                       th:classappend="${product.stock <= 0} ? 'disabled-link' : ''">
+                       Add to Cart
+                    </a>
+
+                    <!-- Sold Out Message -->
+                    <p th:if="${product.stock <= 0}" class="sold-out-message">
+                        Stock is sold out.
+                    </p>
+
+                    <!-- Product Details Button -->
+                    <a class="btn1" th:href="@{/products/detail/{id}(id=${product.id})}">View Details</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Links to Toggle Edit Mode -->
+    <div style="margin-top: 20px;">
+        <a th:href="@{/products/catalog?edit=true}" class="btn">Edit Mode</a>
+        <a th:href="@{/products/catalog?edit=false}" class="btn1">View Mode</a>
+    </div>
 
 </body>
 </html>

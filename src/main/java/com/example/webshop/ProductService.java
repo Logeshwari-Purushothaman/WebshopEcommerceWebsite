@@ -1,19 +1,23 @@
 package com.example.webshop;
 
+import com.example.webshop.inventory.InventoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class ProductService {
 
     private List<ProductModel> products;
-    
+    private final InventoryService inventoryService;  // Inject InventoryService
 
+    
+    @Autowired
     // Constructor to initialize the product list
-    public ProductService() {
+    public ProductService(InventoryService inventoryService) {
+        this.inventoryService = inventoryService;
         // Sample product list
         this.products = new ArrayList<>(List.of(
             new ProductModel(1L, "T-Shirt", 19.99, "M", "Red", "Clothing"),
@@ -24,9 +28,21 @@ public class ProductService {
             new ProductModel(6L, "T-Shirt", 21.99, "L", "Black", "Clothing"),
             // Add more hardcoded products for the catalog
             new ProductModel(7L, "Socks", 9.99, "M", "White", "Clothing"),
-            new ProductModel(8L, "Scarf", 19.99, "One Size", "Red", "Accessories")
+            new ProductModel(8L, "Scarf", 19.99, "XL", "Red", "Accessories")
+            
         ));
+        
+        // Initialize inventory with some stock for each product
+        inventoryService.initializeStock(1L, 50);
+        inventoryService.initializeStock(2L, 30);
+        inventoryService.initializeStock(3L, 20);
+        inventoryService.initializeStock(4L, 3);
+        inventoryService.initializeStock(5L, 40);
+        inventoryService.initializeStock(6L, 1);
+        inventoryService.initializeStock(7L, 3);
+        inventoryService.initializeStock(8L, 0);
     }
+   
 
     // Get all products
     public List<ProductModel> getAllProducts() {
@@ -79,8 +95,29 @@ public class ProductService {
         }
 
         products.add(product);
+        inventoryService.initializeStock(product.getId(), 10); // Initialize with 10 stock for each new product
         return true;
     }
+    
+    // Check product availability by productId
+    public boolean checkProductAvailability(Long productId, int quantity) {
+        Integer stock = inventoryService.getStock(productId);
+        return stock != null && stock >= quantity;
+    }
+
+    // Update stock when a product is bought (e.g., reduce stock)
+    public boolean reduceStock(Long productId, int quantity) {
+    	try {
+            // Try reducing the stock
+            inventoryService.reduceStock(productId, quantity);
+            return true;  // Stock reduced successfully
+        } catch (RuntimeException e) {
+            // Handle the error if there is not enough stock
+            System.out.println("Error reducing stock: " + e.getMessage());
+            return false;  // Not enough stock to reduce
+        }
+    }
+ 
 
     // Filter products by color
     public List<ProductModel> getProductsByColor(String color) {
