@@ -2,8 +2,9 @@ package com.example.webshop;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.domain.Page;  // Correct import for Page
+import org.springframework.data.domain.Pageable;  // Correct import for Pageable
 import org.springframework.stereotype.Repository;
-
 
 import java.util.List;
 
@@ -25,5 +26,8 @@ public interface ProductRepository extends JpaRepository<ProductModel, Long> {
 
     // You can also define other utility methods as needed
     List<ProductModel> findByPriceBetween(Double minPrice, Double maxPrice);
-}
+    
+    // Correct method to fetch paginated results
+    Page<ProductModel> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
+}

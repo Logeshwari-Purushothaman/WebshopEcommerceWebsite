@@ -1,12 +1,20 @@
 package com.example.webshop;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.web.PageableDefault;
+
 import com.example.webshop.Shopping.ShoppingCartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.data.domain.Page;  // Correct import for Page
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;  // Correct import for Pageable
+import org.springframework.data.web.PageableDefault;
+
+
 
 import java.util.List;
 
@@ -16,12 +24,15 @@ public class ProductController {
 
     private final ProductDetailFacade productDetailFacade; // Use ProductDetailFacade
     private final ShoppingCartService shoppingCartService; // Add ShoppingCartService
+    private final ProductService productService;
+
 
     // Constructor-based Dependency Injection
     @Autowired
-    public ProductController(ProductDetailFacade productDetailFacade, ShoppingCartService shoppingCartService) {
+    public ProductController(ProductDetailFacade productDetailFacade, ShoppingCartService shoppingCartService,ProductService productService) {
         this.productDetailFacade = productDetailFacade;
         this.shoppingCartService = shoppingCartService;
+        this.productService = productService;
     }
 
     // Test endpoint for verifying controller functionality
@@ -75,6 +86,34 @@ public class ProductController {
         model.addAttribute("search", search);  // Add search term to the model for rendering
         return "catalog"; // Render the catalog view
     }
+    
+    @GetMapping("/catalog-paginated")
+    public String getPaginatedCatalog(
+            @RequestParam(defaultValue = "0") int page, // Default page = 0 (first page)
+            @RequestParam(required = false) String search, // Optional search query
+            @PageableDefault(size = 3) Pageable pageable, // Default page size of 3
+            Model model) {
+
+        // Ensure the Pageable object is constructed with the correct page size
+        pageable = PageRequest.of(page, pageable.getPageSize());
+
+        // Get the page of products, filtered by the search term
+        Page<ProductModel> productPage;
+        if (search != null && !search.isEmpty()) {
+            productPage = productService.searchProducts(search, pageable);
+        } else {
+            productPage = productService.getPaginatedProducts(pageable);
+        }
+
+        // Add attributes to the model
+        model.addAttribute("productPage", productPage); // Pass entire Page object
+        model.addAttribute("search", search); // Pass search query for the search form
+        model.addAttribute("currentPage", productPage); // Pass the current page object to the template
+
+        return "catalogPaginated"; // Name of your Thymeleaf template
+    }
+
+
 
     // REST API Endpoint to get all products with stock (JSON response)
     @GetMapping

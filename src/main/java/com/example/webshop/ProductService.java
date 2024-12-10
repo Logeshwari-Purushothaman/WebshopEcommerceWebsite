@@ -2,6 +2,8 @@ package com.example.webshop;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;  // Correct import for Page
+import org.springframework.data.domain.Pageable;  // Correct import for Pageable
 
 import java.util.List;
 
@@ -65,5 +67,14 @@ public class ProductService {
     // Save Product to Repository
     public void saveProduct(ProductModel product) {
         productRepository.save(product); // Save product to the database
+    }
+    
+    public Page<ProductModel> getPaginatedProducts(Pageable pageable) {
+        return productRepository.findAll(pageable); // Fetch products with pagination
+    }
+    
+    // Search products by name (case insensitive search)
+    public Page<ProductModel> searchProducts(String search, Pageable pageable) {
+        return productRepository.findByNameContainingIgnoreCase(search, pageable);
     }
 }
