@@ -41,4 +41,11 @@ public class InventoryService {
     public boolean isOutOfStock(Long productId) {
         return getStock(productId) <= 0;
     }
+    
+    /**
+     * Remove stock for a specific product.
+     */
+    public void removeStock(Long productId) {
+    	productStock.remove(productId);
+    }
 }

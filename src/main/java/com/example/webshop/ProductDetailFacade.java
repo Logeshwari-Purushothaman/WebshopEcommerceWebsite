@@ -4,35 +4,36 @@ import com.example.webshop.inventory.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 
 @Service
 public class ProductDetailFacade {
 
     private final ProductService productService;
+    private final ProductRepository productRepository; // Inject ProductRepository
     private final InventoryService inventoryService;
 
     // Constructor-based dependency injection
     @Autowired
-    public ProductDetailFacade(ProductService productService, InventoryService inventoryService) {
+    public ProductDetailFacade(ProductService productService, InventoryService inventoryService,ProductRepository productRepository) {
         this.productService = productService;
+        this.productRepository = productRepository; // Initialize repository
         this.inventoryService = inventoryService;
     }
 
     // Method to get all products with stock
     public List<ProductModel> getAllProductsWithStock() {
-        List<ProductModel> products = productService.getAllProducts();
-        products.forEach(product -> 
-            product.setStock(inventoryService.getStock(product.getId()))
-        );
+        List<ProductModel> products = productRepository.findAll(); // Assuming you're using a repository to fetch data
         return products;
     }
+
 
     // Method to get product details with stock and sold-out status
     public ProductDetailDTO getProductDetailDTO(Long id) {
         ProductModel product = productService.getProductById(id);
         if (product != null) {
-            int stock = inventoryService.getStock(id);
+            int stock = product.getStock();
             boolean isSoldOut = stock == 0; // If stock is zero, it is sold out
             return new ProductDetailDTO(product, stock, isSoldOut); // Pass all three parameters to the constructor
         }
@@ -72,9 +73,9 @@ public class ProductDetailFacade {
         productService.deleteProductById(id);
     }
 
-    // Method to filter products by color
+    // Method to get products by color
     public List<ProductModel> getProductsByColor(String color) {
-        return productService.getProductsByColor(color);
+        return productRepository.findByColorIgnoreCase(color); // Use repository to find by color (case-insensitive)
     }
 
     // Method to filter products by category
@@ -85,5 +86,10 @@ public class ProductDetailFacade {
     // Method to filter products by name
     public List<ProductModel> getProductsByName(String name) {
         return productService.getProductsByName(name);
+    }
+    
+    // Add Product method
+    public void addProduct(ProductModel product) {
+        productService.saveProduct(product); // Delegate to ProductService
     }
 }

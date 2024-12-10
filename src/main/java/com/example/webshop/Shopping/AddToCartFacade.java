@@ -23,7 +23,7 @@ public class AddToCartFacade {
     public ShoppingCart addToCart(Long productId) {
         ProductModel product = productService.getProductById(productId);
 
-        if (product == null || inventoryService.getStock(productId) <= 0) {
+        if (product == null || product.getStock() <= 0) {
             throw new RuntimeException("Not enough stock for product: " + productId);
         }
         else

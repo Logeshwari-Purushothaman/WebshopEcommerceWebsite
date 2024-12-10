@@ -76,33 +76,38 @@
 </head>
 <body>
 
-    <h1>Your Shopping Cart</h1>
+	 <h1>Your Shopping Cart</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Iterate through the cart products -->
-            <tr th:each="entry : ${cart.products}">
-                <td th:text="${entry.key.name}">Product Name</td>
-                <td th:text="${entry.value}">Quantity</td>
-                <td th:text="${entry.key.price}">Price</td>
-                <td th:text="${entry.key.price * entry.value}">Total Price</td>
-            </tr>
-        </tbody>
-    </table>
+	    <!-- Display error message if any -->
+	    <div th:if="${error}" style="color: red;">
+	        <p th:text="${error}"></p>
+	    </div>
 
-    <div class="total-price">
-        <h3>Total Price: €<span th:text="${totalPrice}"></span></h3>
-    </div>
+	    <table>
+	        <thead>
+	            <tr>
+	                <th>Product Name</th>
+	                <th>Quantity</th>
+	                <th>Price</th>
+	                <th>Total Price</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <!-- Iterate through the cart products -->
+	            <tr th:each="entry : ${cart.products}">
+					<td th:text="${entry.key.name}">Product Name</td>
+					        <td th:text="${entry.value}">Quantity</td>
+					        <td th:text="${entry.key.price}">Price</td>
+					        <td th:text="${entry.key.price * entry.value}">Total Price</td>
+	            </tr>
+	        </tbody>
+	    </table>
 
-    <a href="/products/catalog" class="back-button">Back to Catalog</a>
+	    <div class="total-price">
+	        <h3>Total Price: €<span th:text="${totalPrice}"></span></h3>
+	    </div>
 
-</body>
-</html>
+	    <a href="/products/catalog" class="back-button">Back to Catalog</a>
+
+	</body>
+	</html>

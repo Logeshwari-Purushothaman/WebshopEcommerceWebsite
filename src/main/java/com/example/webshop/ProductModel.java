@@ -1,29 +1,38 @@
 package com.example.webshop;
 
+import java.util.Objects;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class ProductModel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private Double price;
     private String size;
     private String color;
-    private String category; // New attribute
-    private Integer stock; // Temporary stock field
+    private String category;
+    private Integer stock;
 
-
-    // Default constructor (needed for deserialization)
+    // Default constructor
     public ProductModel() {
     }
 
     // Constructor with parameters
-    public ProductModel(long id, String name, double price, String color, String category, String size) {
-        this.id = id;
+    public ProductModel(String name, double price, String color, String category, String size, Integer stock) {
         this.name = name;
         this.price = price;
         this.size = size;
         this.color = color;
         this.category = category;
-        this.stock = stock; // Initialize the stock field
-
+        this.stock = stock;
     }
 
     // Getters and setters
@@ -81,5 +90,18 @@ public class ProductModel {
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductModel that = (ProductModel) o;
+        return id != null && id.equals(that.id);  // Compare based on unique product ID
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);  // Generate hash code based on product ID
     }
 }
