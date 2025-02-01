@@ -1,75 +1,91 @@
 package com.example.webshop.Shopping;
 
-import com.example.webshop.PriceCalculationService; // Import the PriceCalculationService
-
+import com.example.webshop.PriceCalculationService;
 import java.math.BigDecimal;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-/**
- * Controller class that handles requests related to the shopping cart functionality.
- * This class is responsible for managing the cart view and adding products to the cart.
- */
 @Controller
 @RequestMapping("/shopping")
 public class ShoppingCartController {
 
     private final AddToCartFacade addToCartFacade;
-    private final PriceCalculationService priceCalculationService; // Inject the price calculation service
+    private final PriceCalculationService priceCalculationService;
 
-    /**
-     * Constructor-based dependency injection for the AddToCartFacade and PriceCalculationService.
-     * 
-     * @param addToCartFacade the AddToCartFacade to manage shopping cart operations.
-     * @param priceCalculationService the service to round prices.
-     */
     public ShoppingCartController(AddToCartFacade addToCartFacade, PriceCalculationService priceCalculationService) {
         this.addToCartFacade = addToCartFacade;
         this.priceCalculationService = priceCalculationService;
     }
 
-    /**
-     * Handles the request to view the cart page.
-     * Adds the current shopping cart and total price to the model, which will be rendered on the cart page.
-     * 
-     * @param model the model to add attributes to, which will be passed to the view.
-     * @return the name of the view to render, which in this case is "cart".
-     */
     @GetMapping("/cart")
     public String getCart(Model model) {
-        // Get the total price from the shopping cart service
-        BigDecimal totalPrice = addToCartFacade.getTotalPrice();
+        return getCartInCurrency(addToCartFacade.getCurrentCurrency(), model);
+    }
+    
+	@GetMapping("/cart/{currency}")
+	public String getCartInCurrency(@PathVariable String currency, Model model) {
+		try {
+			ShoppingCart cart = addToCartFacade.getShoppingCart();
+			PriceCalculationService.Currency targetCurrency = addToCartFacade.getCurrency(currency);
 
-        // Round the total price using the PriceCalculationService
-        BigDecimal roundedPrice = priceCalculationService.roundPrice(totalPrice);
+			// Convert prices if necessary
+			if (!targetCurrency.name().equalsIgnoreCase(cart.getCurrency())) {
+				addToCartFacade.convertProductPrices(targetCurrency);
+			}
 
-        // Add the cart and the rounded total price to the model
-        model.addAttribute("cart", addToCartFacade.getShoppingCart());
-        model.addAttribute("totalPrice", roundedPrice); // Use the rounded total price
+			BigDecimal originalTotalPrice = addToCartFacade.getOriginalTotalPrice();
+			BigDecimal effectiveTotalPrice = addToCartFacade.getEffectiveTotalPrice();
 
-        return "cart"; // Return the cart view
+			model.addAttribute("cart", cart);
+			model.addAttribute("originalTotalPrice", originalTotalPrice);
+			model.addAttribute("effectiveTotalPrice", effectiveTotalPrice);
+			model.addAttribute("currency", targetCurrency.name());
+			model.addAttribute("otherCurrency",
+			        targetCurrency == PriceCalculationService.Currency.EURO ? "DOLLAR" : "EURO");
+			model.addAttribute("voucherPercentage", priceCalculationService.getVoucherPercentage());
+			model.addAttribute("totalPrice", cart.getEffectiveTotalPrice());
+			model.addAttribute("locale", new java.util.Locale("de", "DE")); // German locale uses comma as decimal separator
+
+
+			return "cart";
+		} catch (IllegalArgumentException e) {
+			model.addAttribute("error", "Invalid currency: " + currency);
+			return getCart(model);
+		}
+	}
+
+    @PostMapping("/cart/update")
+    public String updateCart(@RequestParam Long productId, @RequestParam int quantity, Model model) {
+        try {
+            addToCartFacade.updateCartItem(productId, quantity);
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+        }
+        return "redirect:/shopping/cart";
     }
 
-    /**
-     * Handles the request to add a product to the shopping cart.
-     * If the product is available and has sufficient stock, it will be added to the cart.
-     * If stock is insufficient, an error message will be shown.
-     * 
-     * @param id the ID of the product to be added to the cart.
-     * @param model the model to add attributes to, which will be passed to the view.
-     * @return a redirect to the cart page after attempting to add the product.
-     */
+
+
     @GetMapping("/cart-add/{id}")
     public String addProductToCart(@PathVariable Long id, Model model) {
         try {
-            addToCartFacade.addToCart(id);  // Add the product to the cart
+            addToCartFacade.addToCart(id);
         } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());  // Add error message if stock is insufficient
+            model.addAttribute("error", e.getMessage());
         }
-        return "redirect:/shopping/cart";  // Redirect to the cart page
+        return "redirect:/shopping/cart";
+    }
+
+    @PostMapping("/cart/voucher")
+    public String applyVoucher() {
+        addToCartFacade.applyVoucher();
+        return "redirect:/shopping/cart";
+    }
+
+    @PostMapping("/cart/removevoucher")
+    public String removeVoucher() {
+        addToCartFacade.removeVoucher();
+        return "redirect:/shopping/cart";
     }
 }

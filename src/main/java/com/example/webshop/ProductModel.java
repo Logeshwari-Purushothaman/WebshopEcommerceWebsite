@@ -29,6 +29,9 @@ public class ProductModel {
 
     /** The price of the product. */
     private BigDecimal price;
+    
+    private BigDecimal effectivePrice; // New field for effective price
+
 
     /** The size of the product. */
     private String size;
@@ -59,11 +62,14 @@ public class ProductModel {
     public ProductModel(String name, BigDecimal price, String color, String category, String size, Integer stock) {
         this.name = name;
         this.price = price;
+        this.effectivePrice = price; // Initialize effective price with the original price
         this.size = size;
         this.color = color;
         this.category = category;
         this.stock = stock;
+
     }
+    
 
     /**
      * Gets the ID of the product.
@@ -108,6 +114,24 @@ public class ProductModel {
      */
     public BigDecimal getPrice() {
         return price;
+    }
+    
+    /**
+     * Gets the effective price of the product.
+     * 
+     * @return The effective price of the product.
+     */
+    public BigDecimal getEffectivePrice() {
+        return effectivePrice;
+    }
+    
+    /**
+     * Sets the effective price of the product.
+     * 
+     * @param effectivePrice The effective price to set for the product.
+     */
+    public void setEffectivePrice(BigDecimal effectivePrice) {
+        this.effectivePrice = effectivePrice;
     }
 
     /**
