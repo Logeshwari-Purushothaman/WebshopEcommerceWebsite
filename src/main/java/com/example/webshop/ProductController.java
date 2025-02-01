@@ -173,6 +173,18 @@ public class ProductController {
         List<ProductModel> products = productDetailFacade.getAllProductsWithStock(); // Use facade to get products with stock
         return ResponseEntity.ok(products);
     }
+    
+    @GetMapping("/detail/{id}")
+    public String getProductDetail(@PathVariable Long id, Model model) {
+        ProductDetailDTO productDetailDTO = productDetailFacade.getProductDetailDTO(id);
+        if (productDetailDTO != null) {
+            model.addAttribute("productDetailDTO", productDetailDTO);
+            return "productDetail";
+        } else {
+            return "error"; // or handle the case when product is not found
+        }
+    }
+
 
     /**
      * Displays the product detail page with detailed information and stock.
@@ -181,7 +193,7 @@ public class ProductController {
      * @param model The model to pass the product details to the view.
      * @return The view name for displaying product details.
      */
-    @GetMapping("/detail/{id}")
+    @GetMapping("/detail-Page/{id}")
     public String getProductDetailPage(@PathVariable Long id, Model model) {
         ProductDetailDTO productDetailDTO = productDetailFacade.getProductDetailDTO(id); // Use facade for product details
         if (productDetailDTO != null) {

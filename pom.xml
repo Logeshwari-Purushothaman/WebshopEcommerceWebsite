@@ -58,6 +58,10 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -65,7 +69,8 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.example.demo.WebshopApplication</mainClass> <!-- Specify the main class -->
+					<mainClass>com.example.demo.WebshopApplication</mainClass> <!--
+					Specify the main class -->
 				</configuration>
 			</plugin>
 			<plugin>
