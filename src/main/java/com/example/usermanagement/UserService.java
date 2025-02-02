@@ -59,3 +59,27 @@ public class UserService {
     }
     
 }
+
+/*package com.example.usermanagement;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.example.webshop.order.OrderService;
+import com.example.webshop.order.Order;
+import java.util.List;
+
+@Service
+public class UserService {
+    @Autowired
+    private OrderService orderService;
+
+    // ... existing code ...
+
+    public Order getRecentOrderForUser() {
+        Long userId = getCurrentUserId();
+        return this.orderService.getRecentOrderForUser(userId);
+    }
+
+    // ... existing code ...
+}
+*/

@@ -15,3 +15,31 @@ public class OrderService {
         return System.currentTimeMillis();
     }
 }
+
+/*
+package com.example.webshop.order;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.example.usermanagement.UserService;
+import java.math.BigDecimal;
+
+@Service
+public class OrderService {
+    @Autowired
+    private UserService userService;
+
+    public Order finalizeOrderWithTotal(BigDecimal total) {
+        Long userId = userService.getCurrentUserId();
+        return new Order(generateOrderId(), total, total, userId, "USD");
+    }
+
+    public Order getRecentOrderForUser(Long userId) {
+        return new Order(generateOrderId(), BigDecimal.ZERO, BigDecimal.ZERO, userId, "USD");
+    }
+
+    private Long generateOrderId() {
+        return System.currentTimeMillis();
+    }
+}
+*/
