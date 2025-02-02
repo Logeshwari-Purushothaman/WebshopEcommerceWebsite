@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="'Order Success - ' + ${order != null ? 'Order #' + order.id : 'Error'}">Order Success</title>
+    <title th:text="'Order Success - ' + (${order != null} ? 'Order #' + ${order.id} : 'Error')">Order Success</title>
     <link rel="stylesheet" href="/css/styles.css">
     <style>
         body {
@@ -68,16 +68,21 @@
 	        <h3>Order Details:</h3>
 	        <ul>
 	            <li>Order ID: <span th:text="${order.id}">123</span></li>
+				
 				<li>Total Price: 
 				    <span th:if="${order.currency == 'EURO'}" 
-				          th:text="${order.currency + ' ' + #numbers.formatDecimal(order.effectiveTotalPrice, 1, 'POINT', 2, 'COMMA')}">
-				        EURO 0,00
-				    </span>
-				    <span th:if="${order.currency == 'DOLLAR'}" 
-				          th:text="${order.currency + ' ' + #numbers.formatDecimal(order.effectiveTotalPrice, 1, 'POINT', 2, 'POINT')}">
-				        DOLLAR 0.00
-				    </span>
+					      th:text="${order.currency + ' ' + #numbers.formatDecimal(order.effectiveTotalPrice, 1, 'POINT', 2, 'COMMA')}">
+					    EURO 0,00
+					</span>
+					<span th:if="${order.currency == 'DOLLAR'}" 
+					      th:text="${order.currency + ' ' + #numbers.formatDecimal(order.effectiveTotalPrice, 1, 'POINT', 2, 'POINT')}">
+					    DOLLAR 0.00
+					</span>
 				</li>
+				
+				<li>Currency: <span th:text="${order.currency}"></span></li>
+				<li>Effective Total Price: <span th:text="${order.effectiveTotalPrice}"></span></li>
+
 	            <li>User ID: <span th:text="${order.userId}">456</span></li>
 
 	        </ul>
@@ -93,16 +98,11 @@
 	</footer>
 
 	<div style="display:none;">
-	    <p>Debug Info:</p>
-	    <p>Raw Effective Total Price: <span th:text="${order.effectiveTotalPrice}"></span></p>
-	    <p>Currency: <span th:text="${order.currency}"></span></p>
-		<!-- Debug: Order ID: [(${order.id})] -->
-		<!-- Debug: Total Price: [(${order.totalPrice})] -->
-		<!-- Debug: User ID: [(${order.userId})] -->
-		<!-- Debug: Currency: [(${order.currency})] -->
-
+		<p>Debug Info:</p>
+		<p>Raw Effective Total Price: <span th:text="${order.effectiveTotalPrice}"></span></p>
+		<p>Currency: <span th:text="${order.currency}"></span></p>
+		<p>Order ID: <span th:text="${order.id}"></span></p>
+		<p>User ID: <span th:text="${order.userId}"></span></p>
 	</div>
-
-
 </body>
 </html>

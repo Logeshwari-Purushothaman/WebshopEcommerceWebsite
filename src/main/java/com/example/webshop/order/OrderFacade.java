@@ -16,6 +16,7 @@ public class OrderFacade {
 
 	public Order finalizeOrder(BigDecimal effectiveTotalPrice, BigDecimal originalTotalPrice, String currency) {
 		System.out.println("Debug: OrderFacade - Creating order");
+		System.out.println("Debug: Effective Total Price: " + effectiveTotalPrice);
 		System.out.println("Debug: Currency: " + currency);
 
 		Long orderId = generateOrderId();

@@ -17,22 +17,6 @@ public class ShoppingCartController {
         this.addToCartFacade = addToCartFacade;
         this.priceCalculationService = priceCalculationService;
     }
-    
-    @PostMapping("/checkout")
-    public String initiateCheckout(Model model) {
-        ShoppingCart cart = addToCartFacade.getShoppingCart();
-        BigDecimal totalPrice = cart.getEffectiveTotalPrice();
-        String currency = cart.getCurrency();
-        System.out.println("Debug: ShoppingCartController - Initiating checkout");
-        System.out.println("Debug: Total Price: " + totalPrice);
-        System.out.println("Debug: Currency: " + currency);
-        
-        // Add these attributes to the model
-        model.addAttribute("totalPrice", totalPrice);
-        model.addAttribute("currency", currency);
-        
-        return "redirect:/order/create";
-    }
 
 
     @GetMapping("/cart")

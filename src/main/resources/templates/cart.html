@@ -208,12 +208,10 @@
             <a th:if="${currency == 'EURO'}" th:href="@{/shopping/cart/DOLLAR}" class="currency-button">Convert to USD</a>
             <a th:if="${currency == 'DOLLAR'}" th:href="@{/shopping/cart/EURO}" class="currency-button">Convert to EUR</a>
         </div>
-		
-		<form th:action="@{/checkout}" method="post">
-		    <input type="hidden" name="totalPrice" th:value="${cart.effectiveTotalPrice}" />
+		<form th:action="@{/order/checkout}" method="post">
+			<input type="hidden" name="totalPrice" th:value="${effectiveTotalPrice}" />
 		    <button type="submit" class="pay-button">Pay Now</button>
 		</form>
-
     </div>
 
     <div th:if="${cart == null or cart.products.empty}">

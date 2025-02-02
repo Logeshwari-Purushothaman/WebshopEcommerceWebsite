@@ -26,8 +26,8 @@ public class OrderAdapter {
 	    System.out.println("Debug: Original Total Price: " + originalTotalPrice);
 	    System.out.println("Debug: Currency: " + currency);
 
-	    Order order = orderFacade.finalizeOrder(effectiveTotalPrice, originalTotalPrice, currency);
-	    return order;
+	   // Order order = orderFacade.finalizeOrder(effectiveTotalPrice, originalTotalPrice, currency);
+	    return orderFacade.finalizeOrder(effectiveTotalPrice, originalTotalPrice, currency);
 	}
 
 
