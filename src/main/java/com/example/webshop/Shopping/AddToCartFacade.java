@@ -53,9 +53,7 @@ public class AddToCartFacade {
      *
      * @param currency The new currency to set.
      */
-    public void updateCartCurrency(String currency) {
-        shoppingCartService.getShoppingCart().setCurrency(currency);
-    }
+
     
     
     /**

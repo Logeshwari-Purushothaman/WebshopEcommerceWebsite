@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Order Success - ' + ${order != null ? 'Order #' + order.id : 'Error'}">Order Success</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .order-details {
+            width: 80%;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .order-details ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .order-details li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .button {
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+            font-size: 1em;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Web Shop</h1>
+        <nav>
+            <ul>
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/products/catalog}">Products</a></li>
+                <li><a th:href="@{/shopping/cart}">Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+	
+	<main>
+	    <h2>Order Successful!</h2>
+	    <div class="order-details" th:if="${order != null}">
+	        <p>Thank you for your purchase. Your order has been successfully placed.</p>
+	        <h3>Order Details:</h3>
+	        <ul>
+	            <li>Order ID: <span th:text="${order.id}">123</span></li>
+				<li>Total Price: 
+				    <span th:if="${order.currency == 'EURO'}" 
+				          th:text="${order.currency + ' ' + #numbers.formatDecimal(order.effectiveTotalPrice, 1, 'POINT', 2, 'COMMA')}">
+				        EURO 0,00
+				    </span>
+				    <span th:if="${order.currency == 'DOLLAR'}" 
+				          th:text="${order.currency + ' ' + #numbers.formatDecimal(order.effectiveTotalPrice, 1, 'POINT', 2, 'POINT')}">
+				        DOLLAR 0.00
+				    </span>
+				</li>
+	            <li>User ID: <span th:text="${order.userId}">456</span></li>
+
+	        </ul>
+	    </div>
+	    <div th:unless="${order != null}">
+	        <p>Sorry, we couldn't retrieve your order details. Please contact customer support.</p>
+	    </div>
+	    <a th:href="@{/products/catalog}" class="button">Continue Shopping</a>
+	</main>
+
+	<footer>
+	    <p>&copy; <span th:text="${#dates.year(#dates.createNow())}">2025</span> Web Shop. All rights reserved.</p>
+	</footer>
+
+	<div style="display:none;">
+	    <p>Debug Info:</p>
+	    <p>Raw Effective Total Price: <span th:text="${order.effectiveTotalPrice}"></span></p>
+	    <p>Currency: <span th:text="${order.currency}"></span></p>
+		<!-- Debug: Order ID: [(${order.id})] -->
+		<!-- Debug: Total Price: [(${order.totalPrice})] -->
+		<!-- Debug: User ID: [(${order.userId})] -->
+		<!-- Debug: Currency: [(${order.currency})] -->
+
+	</div>
+
+
+</body>
+</html>

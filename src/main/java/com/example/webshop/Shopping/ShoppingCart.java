@@ -14,9 +14,18 @@ public class ShoppingCart {
     private boolean voucherApplied = false;
     private BigDecimal originalTotalPrice = BigDecimal.ZERO;
     private BigDecimal effectiveTotalPrice = BigDecimal.ZERO;
+    private Long orderId;
+    private BigDecimal totalPrice;
+
 
     public ShoppingCart(String currency) {
         this.currency = currency; 
+        this.orderId = null; // Initialize as null
+
+    }
+    
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
     }
     
     public void addProduct(ProductModel product, int quantity) {
@@ -30,16 +39,15 @@ public class ShoppingCart {
     }
 
     private void updateTotalPrices() {
-    	    originalTotalPrice = products.entrySet().stream()
-    	        .map(entry -> entry.getKey().getPrice().multiply(BigDecimal.valueOf(entry.getValue())))
-    	        .reduce(BigDecimal.ZERO, BigDecimal::add);
-    	    
-    	    effectiveTotalPrice = products.entrySet().stream()
-    	        .map(entry -> entry.getKey().getEffectivePrice().multiply(BigDecimal.valueOf(entry.getValue())))
-    	        .reduce(BigDecimal.ZERO, BigDecimal::add);
-    	}
+        originalTotalPrice = products.entrySet().stream()
+            .map(entry -> entry.getKey().getPrice().multiply(BigDecimal.valueOf(entry.getValue())))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        effectiveTotalPrice = products.entrySet().stream()
+            .map(entry -> entry.getKey().getEffectivePrice().multiply(BigDecimal.valueOf(entry.getValue())))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 
-    
     public void clear() {
         products.clear();
         voucherApplied = false;
@@ -81,10 +89,21 @@ public class ShoppingCart {
     }
 
     public BigDecimal getEffectiveTotalPrice() {
+        System.out.println("Debug: ShoppingCart - getEffectiveTotalPrice called");
+        System.out.println("Debug: effectiveTotalPrice: " + effectiveTotalPrice);
         return effectiveTotalPrice;
     }
 
+
     public void setEffectiveTotalPrice(BigDecimal effectiveTotalPrice) {
         this.effectiveTotalPrice = effectiveTotalPrice;
+    }
+    
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 }

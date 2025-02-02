@@ -57,9 +57,8 @@
             font-weight: bold;
         }
 
-        .back-button, .currency-button {
+        .back-button, .currency-button, .pay-button {
             margin-top: 20px;
-            background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
@@ -67,9 +66,15 @@
             text-align: center;
             display: inline-block;
             font-size: 1em;
+            border: none;
+            cursor: pointer;
         }
 
-        .back-button:hover, .currency-button:hover {
+        .back-button {
+            background-color: #4CAF50;
+        }
+
+        .back-button:hover {
             background-color: #45a049;
         }
 
@@ -79,6 +84,14 @@
 
         .currency-button:hover {
             background-color: #007B9A;
+        }
+
+        .pay-button {
+            background-color: #f44336;
+        }
+
+        .pay-button:hover {
+            background-color: #d32f2f;
         }
     </style>
 </head>
@@ -92,107 +105,119 @@
         <p th:text="${error}">An error occurred</p>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Original Price</th>
-                <th>Effective Price</th>
-                <th>Total Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Iterate through the cart products -->
-            <tr th:each="entry : ${cart.products}">
-                <td th:text="${entry.key.name}">Product Name</td>
-                <td th:text="${entry.value}">Quantity</td>
-                <td>
-                    <span th:if="${currency == 'EURO'}" 
-                          th:text="${currency + ' ' + #numbers.formatDecimal(entry.key.price, 1, 'POINT', 2, 'COMMA')}">
-                        EURO 0,00
-                    </span>
-                    <span th:if="${currency == 'DOLLAR'}" 
-                          th:text="${currency + ' ' + #numbers.formatDecimal(entry.key.price, 1, 'POINT', 2, 'POINT')}">
-                        DOLLAR 0.00
-                    </span>
-                </td>
-                <td>
-                    <span th:if="${currency == 'EURO'}" 
-                          th:text="${currency + ' ' + #numbers.formatDecimal(entry.key.effectivePrice, 1, 'POINT', 2, 'COMMA')}">
-                        EURO 0,00
-                    </span>
-                    <span th:if="${currency == 'DOLLAR'}" 
-                          th:text="${currency + ' ' + #numbers.formatDecimal(entry.key.effectivePrice, 1, 'POINT', 2, 'POINT')}">
-                        DOLLAR 0.00
-                    </span>
-                </td>
-                <td>
-                    <span th:if="${currency == 'EURO'}" 
-                          th:text="${currency + ' ' + #numbers.formatDecimal(entry.key.effectivePrice * entry.value, 1, 'POINT', 2, 'COMMA')}">
-                        EURO 0,00
-                    </span>
-                    <span th:if="${currency == 'DOLLAR'}" 
-                          th:text="${currency + ' ' + #numbers.formatDecimal(entry.key.effectivePrice * entry.value, 1, 'POINT', 2, 'POINT')}">
-                        DOLLAR 0.00
-                    </span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div th:if="${cart != null and !cart.products.empty}">
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Original Price</th>
+                    <th>Effective Price</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate through the cart products -->
+                <tr th:each="entry : ${cart.products}">
+                    <td th:text="${entry.key.name}">Product Name</td>
+                    <td th:text="${entry.value}">Quantity</td>
+                    <td>
+                        <span th:if="${currency == 'EURO'}" 
+                              th:text="${currency + ' ' + #numbers.formatDecimal(entry.key.price, 1, 'POINT', 2, 'COMMA')}">
+                            EURO 0,00
+                        </span>
+                        <span th:if="${currency == 'DOLLAR'}" 
+                              th:text="${currency + ' ' + #numbers.formatDecimal(entry.key.price, 1, 'POINT', 2, 'POINT')}">
+                            DOLLAR 0.00
+                        </span>
+                    </td>
+                    <td>
+                        <span th:if="${currency == 'EURO'}" 
+                              th:text="${currency + ' ' + #numbers.formatDecimal(entry.key.effectivePrice, 1, 'POINT', 2, 'COMMA')}">
+                            EURO 0,00
+                        </span>
+                        <span th:if="${currency == 'DOLLAR'}" 
+                              th:text="${currency + ' ' + #numbers.formatDecimal(entry.key.effectivePrice, 1, 'POINT', 2, 'POINT')}">
+                            DOLLAR 0.00
+                        </span>
+                    </td>
+                    <td>
+                        <span th:if="${currency == 'EURO'}" 
+                              th:text="${currency + ' ' + #numbers.formatDecimal(entry.key.effectivePrice * entry.value, 1, 'POINT', 2, 'COMMA')}">
+                            EURO 0,00
+                        </span>
+                        <span th:if="${currency == 'DOLLAR'}" 
+                              th:text="${currency + ' ' + #numbers.formatDecimal(entry.key.effectivePrice * entry.value, 1, 'POINT', 2, 'POINT')}">
+                            DOLLAR 0.00
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <div class="total-price">
-        <h3>Original Total Price: 
-            <span th:if="${currency == 'EURO'}" 
-                  th:text="${currency + ' ' + #numbers.formatDecimal(originalTotalPrice, 1, 'POINT', 2, 'COMMA')}">
-                EURO 0,00
-            </span>
-            <span th:if="${currency == 'DOLLAR'}" 
-                  th:text="${currency + ' ' + #numbers.formatDecimal(originalTotalPrice, 1, 'POINT', 2, 'POINT')}">
-                DOLLAR 0.00
-            </span>
-        </h3>
-        <h3>Effective Total Price: 
-            <span th:if="${currency == 'EURO'}" 
-                  th:text="${currency + ' ' + #numbers.formatDecimal(effectiveTotalPrice, 1, 'POINT', 2, 'COMMA')}">
-                EURO 0,00
-            </span>
-            <span th:if="${currency == 'DOLLAR'}" 
-                  th:text="${currency + ' ' + #numbers.formatDecimal(effectiveTotalPrice, 1, 'POINT', 2, 'POINT')}">
-                DOLLAR 0.00
-            </span>
-        </h3>
+        <div class="total-price">
+            <h3>Original Total Price: 
+                <span th:if="${currency == 'EURO'}" 
+                      th:text="${currency + ' ' + #numbers.formatDecimal(originalTotalPrice, 1, 'POINT', 2, 'COMMA')}">
+                    EURO 0,00
+                </span>
+                <span th:if="${currency == 'DOLLAR'}" 
+                      th:text="${currency + ' ' + #numbers.formatDecimal(originalTotalPrice, 1, 'POINT', 2, 'POINT')}">
+                    DOLLAR 0.00
+                </span>
+            </h3>
+            <h3>Effective Total Price: 
+                <span th:if="${currency == 'EURO'}" 
+                      th:text="${currency + ' ' + #numbers.formatDecimal(effectiveTotalPrice, 1, 'POINT', 2, 'COMMA')}">
+                    EURO 0,00
+                </span>
+                <span th:if="${currency == 'DOLLAR'}" 
+                      th:text="${currency + ' ' + #numbers.formatDecimal(effectiveTotalPrice, 1, 'POINT', 2, 'POINT')}">
+                    DOLLAR 0.00
+                </span>
+            </h3>
+        </div>
+
+        <div th:if="${cart.voucherApplied}">
+            <p>Voucher applied: <span th:text="${voucherPercentage}">10</span>% discount</p>
+            <form th:action="@{/shopping/cart/removevoucher}" method="post">
+                <button type="submit">Remove Voucher</button>
+            </form>
+        </div>
+
+        <div th:unless="${cart.voucherApplied}">
+            <form th:action="@{/shopping/cart/voucher}" method="post">
+                <button type="submit">Apply <span th:text="${voucherPercentage}">10</span>% Voucher</button>
+            </form>
+        </div>
+        
+        <div class="total-price">
+            <h3>Total Price: 
+                <span th:if="${currency == 'EURO'}" 
+                      th:text="${currency + ' ' + #numbers.formatDecimal(effectiveTotalPrice, 1, 'POINT', 2, 'COMMA')}">
+                    EURO 0,00
+                </span>
+                <span th:if="${currency == 'DOLLAR'}" 
+                      th:text="${currency + ' ' + #numbers.formatDecimal(effectiveTotalPrice, 1, 'POINT', 2, 'POINT')}">
+                    DOLLAR 0.00
+                </span>
+            </h3>
+        </div>
+
+        <div class="currency-conversion">
+            <a th:if="${currency == 'EURO'}" th:href="@{/shopping/cart/DOLLAR}" class="currency-button">Convert to USD</a>
+            <a th:if="${currency == 'DOLLAR'}" th:href="@{/shopping/cart/EURO}" class="currency-button">Convert to EUR</a>
+        </div>
+		
+		<form th:action="@{/checkout}" method="post">
+		    <input type="hidden" name="totalPrice" th:value="${cart.effectiveTotalPrice}" />
+		    <button type="submit" class="pay-button">Pay Now</button>
+		</form>
+
     </div>
 
-    <div th:if="${cart.voucherApplied}">
-        <p>Voucher applied: <span th:text="${voucherPercentage}">10</span>% discount</p>
-        <form th:action="@{/shopping/cart/removevoucher}" method="post">
-            <button type="submit">Remove Voucher</button>
-        </form>
-    </div>
-
-    <div th:unless="${cart.voucherApplied}">
-        <form th:action="@{/shopping/cart/voucher}" method="post">
-            <button type="submit">Apply <span th:text="${voucherPercentage}">10</span>% Voucher</button>
-        </form>
-    </div>
-    
-    <div class="total-price">
-        <h3>Total Price: 
-            <span th:if="${currency == 'EURO'}" 
-                  th:text="${currency + ' ' + #numbers.formatDecimal(effectiveTotalPrice, 1, 'POINT', 2, 'COMMA')}">
-                EURO 0,00
-            </span>
-            <span th:if="${currency == 'DOLLAR'}" 
-                  th:text="${currency + ' ' + #numbers.formatDecimal(effectiveTotalPrice, 1, 'POINT', 2, 'POINT')}">
-                DOLLAR 0.00
-            </span>
-        </h3>
-    </div>
-
-    <div class="currency-conversion">
-        <a th:if="${currency == 'EURO'}" th:href="@{/shopping/cart/DOLLAR}" class="currency-button">Convert to USD</a>
-        <a th:if="${currency == 'DOLLAR'}" th:href="@{/shopping/cart/EURO}" class="currency-button">Convert to EUR</a>
+    <div th:if="${cart == null or cart.products.empty}">
+        <p>Your shopping cart is empty.</p>
     </div>
 
     <a href="/products/catalog" class="back-button">Back to Catalog</a>
