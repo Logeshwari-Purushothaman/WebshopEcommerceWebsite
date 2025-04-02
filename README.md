@@ -35,7 +35,7 @@ This is a full-stack **E-Commerce Website** built using **Spring Boot (Backend),
 - **AWS / Heroku / Render (For Hosting - Future Scope)**  
 
 ---
-## **🛠️ 🎨 Screenshots **  
+## 🛠️ 🎨 Screenshots 
 
 ![image](https://github.com/user-attachments/assets/0ed34203-86bd-46f7-bf65-ae9801440377) 
 ![image](https://github.com/user-attachments/assets/acb62563-0b51-46ea-bc71-a8f111643d5d) 
