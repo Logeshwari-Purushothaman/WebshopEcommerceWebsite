@@ -118,7 +118,7 @@ This project is **MIT Licensed**. Feel free to use and modify!
 Developed by **Logeshwari Purushothaman** 🚀
 
 
-## **📞 Contact & Support  **  
+## 📞 Contact & Support    
 
 🔗 GitHub: Logeshwari Purushothaman
 📧 Email: loge.eshwa@gmail.com
