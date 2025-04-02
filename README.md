@@ -43,29 +43,80 @@ This is a full-stack **E-Commerce Website** built using **Spring Boot (Backend),
 
 ## **🛠️ Installation & Setup**  
 
-1️⃣ Clone the Repository
-git clone https://github.com/yourusername/ecommerce-website.git](https://github.com/Logeshwari-Purushothaman/WebshopEcommerceWebsite.git)
-cd ecommerce-website
+### 1️⃣ Clone the Repository  
+1. Open a terminal and run the following command:
+2. git clone https://github.com/Logeshwari-Purushothaman/WebshopEcommerceWebsite.git
+3. cd WebshopEcommerceWebsite
 
-2️⃣ Configure Database
-Create a MySQL database and update the application.properties:
 
-spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce
-spring.datasource.username=root
-spring.datasource.password=yourpassword
+### 2️⃣ Configure Database  
+Create a MySQL database and update the `application.properties` file:  
 
-3️⃣ Install Dependencies & Run
-mvn clean install
-mvn spring-boot:run
-The application will start at http://localhost:8080
+spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce 
+spring.datasource.username=root 
+spring.datasource.password=yourpassword 
+spring.jpa.hibernate.ddl-auto=update 
+spring.jpa.show-sql=true
 
-## **📄 API Endpoints  **  
+### 3️⃣ Install Dependencies & Run
+1. mvn clean install
+2.  mvn spring-boot:run
+3.   The application will start at http://localhost:8080
 
-HTTP_Method	 Endpoint	                     Description
-GET	  /products/catalog-paginated?page=0	 View paginated product catalog
-GET	  /detail/{id}	                       View product details
-POST	/cart/add/{productId}	               Add product to cart
-POST	/order/checkout	                     Checkout & place an order
+------------------------------------------------------
+
+## 📌 Usage  
+
+### 🛒 Open the Product Catalog  
+- Navigate to **http://localhost:8080/products/catalog**  
+- Browse products with **pagination**  
+
+### ➕ Add a New Product  
+- Click on **"Add Product"** from the dashboard  
+- Fill in the details and submit  
+
+### 🔍 View Product Details  
+- Click on **"View Details"** in the catalog to see full product details  
+
+------------------------------------------------------
+
+## ⚙️ API Endpoints  
+
+| HTTP Method | Endpoint                     | Description                  |
+|------------|-----------------------------|------------------------------|
+| **GET**    | `/products/catalog`          | View all products            |
+| **GET**    | `/products/catalog-paginated?page=0` | View paginated catalog |
+| **GET**    | `/products/add`              | Form to add a new product    |
+| **POST**   | `/products/add`              | Submit new product           |
+| **GET**    | `/products/detail/{id}`      | View product details         |
+
+------------------------------------------------------
+
+## 🔧 Built With  
+- **Spring Boot** (Backend Framework)  
+- **Thymeleaf** (Template Engine)  
+- **MySQL** (Database)  
+- **Spring Data JPA** (ORM)  
+- **Bootstrap + Custom CSS** (Frontend Styling)  
+
+------------------------------------------------------
+
+## 📌 To Do  
+- ✅ Implement Pagination  
+- ✅ Improve UI Styling  
+- ⏳ Add User Authentication  
+- ⏳ Implement Order & Checkout System  
+
+------------------------------------------------------
+
+## 📄 License  
+This project is **MIT Licensed**. Feel free to use and modify!  
+
+------------------------------------------------------
+
+## 👩‍💻 Author  
+Developed by **Logeshwari Purushothaman** 🚀
+
 
 ## **📞 Contact & Support  **  
 
